@@ -121,4 +121,10 @@ public class ShopmeUser {
 		roles.add(role);
 	}
 
+	@Override
+	public String toString() {
+		return "ShopmeUser [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", roles=" + roles + "]";
+	}
+	
 }
