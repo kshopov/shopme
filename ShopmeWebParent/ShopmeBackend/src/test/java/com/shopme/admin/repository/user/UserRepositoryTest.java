@@ -5,7 +5,6 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
