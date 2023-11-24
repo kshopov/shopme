@@ -2,6 +2,7 @@ package com.shopme.admin.services;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shopme.admin.repository.user.RoleRepository;
@@ -15,10 +16,15 @@ public class UserService {
 	private final UserRepository userRepository;
 	
 	private final RoleRepository roleRepository;
+	
+	private final PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+	public UserService(UserRepository userRepository, 
+			RoleRepository roleRepository, 
+			PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	public List<ShopmeUser> listAll() {
@@ -30,7 +36,7 @@ public class UserService {
 	}
 	
 	public void save(ShopmeUser user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
-
 }
