@@ -39,4 +39,10 @@ public class UserService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
+	
+	public boolean isEmailUnique(String email) {
+		System.out.println(email);
+		ShopmeUser user = userRepository.getUserByEmail(email);
+		return userRepository.getUserByEmail(email) == null ? true : false;
+	}
 }
