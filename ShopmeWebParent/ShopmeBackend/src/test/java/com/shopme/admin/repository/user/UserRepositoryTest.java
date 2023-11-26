@@ -93,4 +93,11 @@ public class UserRepositoryTest {
 		userRepository.delete(user);
 		
 	}
+	
+	@Test
+	public void getUserByEmail() {
+		ShopmeUser shopmeUser = userRepository.getUserByEmail("krasimir.shopov@gmail.com");
+		
+		assertThat(shopmeUser).isNotNull();
+	}
 }
