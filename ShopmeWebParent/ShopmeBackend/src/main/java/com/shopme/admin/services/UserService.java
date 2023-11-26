@@ -41,8 +41,6 @@ public class UserService {
 	}
 	
 	public boolean isEmailUnique(String email) {
-		System.out.println(email);
-		ShopmeUser user = userRepository.getUserByEmail(email);
 		return userRepository.getUserByEmail(email) == null ? true : false;
 	}
 }
