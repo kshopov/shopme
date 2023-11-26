@@ -97,7 +97,8 @@
 						</td>						
 						
 						<td>
-							<a class="fas fa-edit fa-1x icon-green" href=""></a>
+							<a class="fas fa-edit fa-1x icon-green" th:href="@{'/users/edit/' + ${user.id}}" 
+								title="Edit user"></a>
 						 &nbsp; 
 							<a class="fas fa-trash fa-1x icon-red" href="">
 						</td>
