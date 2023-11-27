@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.shopme.admin.exceptions.UserNotFoundException;
 import com.shopme.admin.repository.user.RoleRepository;
 import com.shopme.admin.repository.user.UserRepository;
 import com.shopme.common.entity.Role;
@@ -36,11 +37,40 @@ public class UserService {
 	}
 	
 	public void save(ShopmeUser user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		if(user.getId() != null) {
+			ShopmeUser existingUser = userRepository.findById(user.getId()).get();
+			if(user.getPassword().trim().isEmpty()) {
+				user.setPassword(existingUser.getPassword());
+			} else {
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
+			}
+		} else {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		
 		userRepository.save(user);
 	}
 	
-	public boolean isEmailUnique(String email) {
-		return userRepository.getUserByEmail(email) == null ? true : false;
+	public boolean isEmailUnique(Long id, String email) {
+		ShopmeUser user = userRepository.getUserByEmail(email);
+		
+		if(user == null) return true;
+		
+		boolean isCreatingNew = (id == null);
+		
+		if(isCreatingNew) {
+			if(user != null) return false;
+		} else {
+			if(user.getId() != id) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
+	public ShopmeUser get(Long id) throws UserNotFoundException {
+		return userRepository.findById(id)
+				.orElseThrow(() -> new UserNotFoundException("Could not find user with id " + id));
 	}
 }
