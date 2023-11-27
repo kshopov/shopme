@@ -1,10 +1,12 @@
 package com.shopme.admin.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,6 +20,12 @@ public class UserController {
 	private static final String MESSAGE_TEXT = "message";
 	
 	private static final String MESSAGE_SUCCESS_SAVE_USER = "The user has been saved successfully";
+	
+	private static final String PAGE_TITLE_PARAM_TEXT = "pageTitle";
+	
+	private static final String PAGE_TITLE_PARAM_VALUE_NEW_USER = "Create New User";
+	
+	private static final String PAGE_TITLE_PARAM_VALUE_EDIT_USER = "Edit User with Id: ";
 
 	private final UserService userService;
 
@@ -40,6 +48,7 @@ public class UserController {
 		
 		model.addAttribute("user", user);
 		model.addAttribute("listRoles", listRoles);
+		model.addAttribute(PAGE_TITLE_PARAM_TEXT, PAGE_TITLE_PARAM_VALUE_NEW_USER);
 		
 		return "user_form";
 	}
@@ -50,6 +59,25 @@ public class UserController {
 		
 		redirectAttributes.addFlashAttribute(MESSAGE_TEXT, MESSAGE_SUCCESS_SAVE_USER);
 		return "redirect:/users";
+	}
+	
+	@GetMapping("/users/edit/{id}")
+	public String editUser(@PathVariable(name = "id") Long id, 
+			Model model,
+			RedirectAttributes redirectAttributes) {
+		try {
+			ShopmeUser user = userService.get(id);
+			List<Role> listRoles = userService.listRoles();
+			
+			model.addAttribute("user", user);
+			model.addAttribute("listRoles", listRoles);
+			model.addAttribute(PAGE_TITLE_PARAM_TEXT, PAGE_TITLE_PARAM_VALUE_EDIT_USER + id);			
+
+			return "user_form";
+		} catch (Exception ex) {
+			redirectAttributes.addFlashAttribute(MESSAGE_TEXT, ex.getMessage());
+			return "redirect:/users";
+		}
 	}
 	
 }
