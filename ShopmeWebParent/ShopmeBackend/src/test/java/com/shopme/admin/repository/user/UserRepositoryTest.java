@@ -100,4 +100,9 @@ public class UserRepositoryTest {
 		
 		assertThat(shopmeUser).isNotNull();
 	}
+	
+	@Test
+	public void testDisableUser() {
+		userRepository.updateEnableStatus(5L, false);
+	}
 }
