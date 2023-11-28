@@ -2,6 +2,8 @@ package com.shopme.admin.services;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import com.shopme.common.entity.Role;
 import com.shopme.common.entity.ShopmeUser;
 
 @Service
+@Transactional
 public class UserService {
 
 	private final UserRepository userRepository;
@@ -76,5 +79,9 @@ public class UserService {
 
 	public void delete(Long id) {
 		userRepository.deleteById(id);
+	}
+	
+	public void updateUserEnableStatus(Long id, boolean status) {
+		userRepository.updateEnableStatus(id, status);
 	}
 }
