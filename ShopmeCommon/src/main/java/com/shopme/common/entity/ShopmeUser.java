@@ -13,10 +13,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity(name = "users")
 @Table(name = "users")
 public class ShopmeUser {
+	
+	public static final String USER_PHOTOS_DIR = "user-photos";
+	
+	public static final String USER_DEFAULT_PHOTO_DIR = "/images/default-user.png";
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
@@ -125,6 +131,14 @@ public class ShopmeUser {
 	public String toString() {
 		return "ShopmeUser [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", roles=" + roles + "]";
+	}
+	
+	@Transient
+	public String getPhotosImagePath() {
+		if (id == null || photos == null)
+			return USER_DEFAULT_PHOTO_DIR;
+		
+		return "/" + USER_PHOTOS_DIR + "/" + id + "/" + photos;
 	}
 	
 }
