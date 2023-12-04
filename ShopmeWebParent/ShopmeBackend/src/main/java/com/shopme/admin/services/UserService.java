@@ -39,7 +39,7 @@ public class UserService {
 		return (List<Role>) roleRepository.findAll();
 	}
 	
-	public void save(ShopmeUser user) {
+	public ShopmeUser save(ShopmeUser user) {
 		if(user.getId() != null) {
 			ShopmeUser existingUser = userRepository.findById(user.getId()).get();
 			if(user.getPassword().trim().isEmpty()) {
@@ -51,7 +51,7 @@ public class UserService {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 		}
 		
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 	
 	public boolean isEmailUnique(Long id, String email) {
