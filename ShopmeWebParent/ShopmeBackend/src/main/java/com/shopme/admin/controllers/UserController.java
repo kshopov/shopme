@@ -3,6 +3,7 @@ package com.shopme.admin.controllers;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -41,9 +42,29 @@ public class UserController {
 	}
 	
 	@GetMapping("/users")
-	public String listAll(Model model) {
-		List<ShopmeUser> users = userService.listAll();
+	public String listFirstPage(Model model) {
+		return listAllByPage(1, model);
+	}
+	
+	@GetMapping("/users/page/{pageNum}")
+	public String listAllByPage(@PathVariable("pageNum") Integer pageNum, 
+			Model model) {
+		Page<ShopmeUser> page = userService.listAllByPage(pageNum);
+		List<ShopmeUser> users = page.getContent();
+		
+		long startCount = (pageNum - 1) * UserService.USERS_PER_PAGE + 1;
+		long endCount = startCount + UserService.USERS_PER_PAGE - 1;
+		if(endCount > page.getTotalElements()) {
+			endCount = page.getTotalElements();
+		}
+		
 		model.addAttribute("listUsers", users);
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
+		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("totalItems", page.getTotalElements());
+		
 		return "users";
 	}
 	
